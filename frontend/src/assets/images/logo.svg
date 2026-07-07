@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b9bb9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2d7b93;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="90" fill="url(#grad)" opacity="0.1"/>
+  <circle cx="100" cy="100" r="70" fill="url(#grad)" opacity="0.2"/>
+  <circle cx="100" cy="100" r="50" fill="url(#grad)" opacity="0.3"/>
+  <!-- Brain/Human silhouette -->
+  <path d="M100 30 C70 30 50 50 50 80 C50 100 60 115 80 120 L80 130 L120 130 L120 120 C140 115 150 100 150 80 C150 50 130 30 100 30Z" 
+        fill="white" opacity="0.8"/>
+  <!-- Heart -->
+  <path d="M100 95 C95 85 80 80 75 90 C70 100 80 115 100 130 C120 115 130 100 125 90 C120 80 105 85 100 95Z" 
+        fill="#ec4899" opacity="0.8"/>
+  <!-- Leaf -->
+  <path d="M140 70 C145 60 155 55 160 60 C165 65 160 75 150 80 C145 82 142 78 140 70Z" 
+        fill="#10b981" opacity="0.7"/>
+  <path d="M60 70 C55 60 45 55 40 60 C35 65 40 75 50 80 C55 82 58 78 60 70Z" 
+        fill="#10b981" opacity="0.7"/>
+  <!-- Sparkles -->
+  <circle cx="170" cy="40" r="4" fill="#f59e0b" opacity="0.6"/>
+  <circle cx="30" cy="40" r="4" fill="#f59e0b" opacity="0.6"/>
+  <circle cx="170" cy="150" r="4" fill="#8b5cf6" opacity="0.6"/>
+  <circle cx="30" cy="150" r="4" fill="#8b5cf6" opacity="0.6"/>
+  <!-- Text -->
+  <text x="100" y="185" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="700" fill="#2d7b93">
+    TEEN WELLNESS
+  </text>
+</svg>
