@@ -1,0 +1,119 @@
+.therapist-sessions {
+  padding: var(--spacing-xl) 0;
+}
+
+.ts-header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.ts-header h1 {
+  font-size: var(--font-size-2xl);
+  color: var(--neutral-800);
+}
+
+.ts-filters {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.ts-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.ts-item {
+  padding: var(--spacing-lg);
+}
+
+.ts-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.ts-student {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.student-icon {
+  font-size: var(--font-size-xl);
+  color: var(--primary-500);
+}
+
+.ts-student h4 {
+  font-size: var(--font-size-base);
+  color: var(--neutral-800);
+  margin: 0;
+}
+
+.student-email {
+  font-size: var(--font-size-sm);
+  color: var(--neutral-500);
+}
+
+.ts-item-details {
+  display: flex;
+  gap: var(--spacing-xl);
+  flex-wrap: wrap;
+  padding: var(--spacing-sm) 0;
+  border-top: 1px solid var(--neutral-100);
+  border-bottom: 1px solid var(--neutral-100);
+  margin-bottom: var(--spacing-md);
+}
+
+.ts-item-details .detail {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--neutral-600);
+  font-size: var(--font-size-sm);
+}
+
+.ts-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.ts-empty {
+  text-align: center;
+  padding: var(--spacing-2xl);
+  color: var(--neutral-500);
+}
+
+.ts-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: var(--spacing-lg);
+}
+
+@media (max-width: 768px) {
+  .ts-item-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .ts-item-details {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .ts-actions {
+    flex-direction: column;
+  }
+  
+  .ts-actions .btn {
+    width: 100%;
+  }
+}

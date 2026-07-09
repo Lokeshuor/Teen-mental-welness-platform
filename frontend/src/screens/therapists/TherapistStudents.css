@@ -1,0 +1,120 @@
+.therapist-students {
+  padding: var(--spacing-xl) 0;
+}
+
+.ts-header {
+  margin-bottom: var(--spacing-lg);
+}
+
+.ts-header h1 {
+  font-size: var(--font-size-2xl);
+  color: var(--neutral-800);
+}
+
+.ts-header p {
+  color: var(--neutral-500);
+}
+
+.ts-search {
+  position: relative;
+  margin-bottom: var(--spacing-xl);
+  max-width: 400px;
+}
+
+.ts-search .search-icon {
+  position: absolute;
+  left: var(--spacing-md);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--neutral-400);
+}
+
+.ts-search .form-input {
+  padding-left: var(--spacing-xl);
+}
+
+.ts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.ts-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+}
+
+.ts-card-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--primary-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-500);
+  font-size: var(--font-size-xl);
+  flex-shrink: 0;
+}
+
+.ts-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ts-card-info h4 {
+  font-size: var(--font-size-base);
+  color: var(--neutral-800);
+  margin: 0;
+}
+
+.student-email {
+  font-size: var(--font-size-sm);
+  color: var(--neutral-500);
+  margin: 0;
+}
+
+.student-details {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xs);
+}
+
+.student-details .detail {
+  font-size: var(--font-size-xs);
+  color: var(--neutral-400);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.status {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+}
+
+.status.active {
+  background: var(--success-light);
+  color: var(--success);
+}
+
+.status.inactive {
+  background: var(--danger-light);
+  color: var(--danger);
+}
+
+.ts-empty {
+  text-align: center;
+  padding: var(--spacing-2xl);
+  color: var(--neutral-500);
+}
+
+@media (max-width: 768px) {
+  .ts-grid {
+    grid-template-columns: 1fr;
+  }
+}

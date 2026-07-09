@@ -1,0 +1,125 @@
+.availability-manager {
+  padding: var(--spacing-xl) 0;
+}
+
+.am-header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.am-header h1 {
+  font-size: var(--font-size-2xl);
+  color: var(--neutral-800);
+}
+
+.am-header p {
+  color: var(--neutral-500);
+}
+
+.am-actions {
+  margin-bottom: var(--spacing-lg);
+}
+
+.am-form {
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.am-form h3 {
+  font-size: var(--font-size-lg);
+  color: var(--neutral-700);
+  margin-bottom: var(--spacing-md);
+}
+
+.am-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+.am-form .form-actions {
+  margin-top: var(--spacing-md);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.am-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.am-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md);
+}
+
+.am-item-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+  flex-wrap: wrap;
+}
+
+.am-day {
+  font-weight: 600;
+  color: var(--neutral-800);
+  min-width: 100px;
+}
+
+.am-time {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--neutral-600);
+  font-size: var(--font-size-sm);
+}
+
+.am-status {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+}
+
+.am-status.available {
+  background: var(--success-light);
+  color: var(--success);
+}
+
+.am-status.booked {
+  background: var(--warning-light);
+  color: var(--warning);
+}
+
+.am-empty {
+  text-align: center;
+  padding: var(--spacing-2xl);
+  color: var(--neutral-500);
+}
+
+.am-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: var(--spacing-lg);
+}
+
+@media (max-width: 768px) {
+  .am-form .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .am-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+  
+  .am-item-info {
+    gap: var(--spacing-md);
+  }
+}
