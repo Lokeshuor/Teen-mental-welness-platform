@@ -1,0 +1,132 @@
+.parent-notifications {
+  padding: var(--spacing-xl) 0;
+}
+
+.pn-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.pn-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.pn-header-left h1 {
+  font-size: var(--font-size-2xl);
+  color: var(--neutral-800);
+}
+
+.pn-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.pn-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.pn-item:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.pn-item.unread {
+  border-left: 4px solid var(--primary-500);
+}
+
+.pn-item.read {
+  opacity: 0.7;
+}
+
+.pn-item-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-lg);
+  flex-shrink: 0;
+}
+
+.pn-item-content {
+  flex: 1;
+}
+
+.pn-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.pn-item-header h4 {
+  font-size: var(--font-size-base);
+  color: var(--neutral-800);
+  margin: 0;
+}
+
+.pn-item-date {
+  font-size: var(--font-size-xs);
+  color: var(--neutral-400);
+}
+
+.pn-item-content p {
+  font-size: var(--font-size-sm);
+  color: var(--neutral-600);
+  margin: var(--spacing-xs) 0 0 0;
+}
+
+.pn-unread-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--primary-500);
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: var(--spacing-sm);
+}
+
+.pn-empty {
+  text-align: center;
+  padding: var(--spacing-2xl);
+  color: var(--neutral-500);
+}
+
+.pn-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: var(--spacing-lg);
+}
+
+@media (max-width: 768px) {
+  .pn-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .pn-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .pn-item-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

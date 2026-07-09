@@ -1,0 +1,149 @@
+.user-management {
+  padding: var(--spacing-xl) 0;
+}
+
+.um-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.um-header h1 {
+  font-size: var(--font-size-2xl);
+  color: var(--neutral-800);
+}
+
+.um-filters {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.um-filters .search-box {
+  flex: 1;
+  position: relative;
+  min-width: 200px;
+}
+
+.um-filters .search-icon {
+  position: absolute;
+  left: var(--spacing-md);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--neutral-400);
+}
+
+.um-filters .form-input {
+  padding-left: var(--spacing-xl);
+}
+
+.um-filters .form-select {
+  min-width: 150px;
+}
+
+.um-table-container {
+  overflow-x: auto;
+}
+
+.um-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.um-table thead {
+  background: var(--neutral-50);
+}
+
+.um-table th {
+  padding: var(--spacing-md);
+  text-align: left;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  color: var(--neutral-500);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.um-table td {
+  padding: var(--spacing-md);
+  border-top: 1px solid var(--neutral-100);
+}
+
+.um-table tbody tr:hover {
+  background: var(--neutral-50);
+}
+
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-500);
+  flex-shrink: 0;
+}
+
+.um-actions {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.no-data {
+  text-align: center;
+  color: var(--neutral-400);
+  padding: var(--spacing-xl);
+}
+
+.um-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: var(--spacing-lg);
+}
+
+.um-modal-content {
+  text-align: center;
+}
+
+.um-modal-content .modal-hint {
+  color: var(--neutral-500);
+  margin-bottom: var(--spacing-lg);
+}
+
+@media (max-width: 768px) {
+  .um-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .um-filters {
+    flex-direction: column;
+  }
+  
+  .um-table {
+    font-size: var(--font-size-sm);
+  }
+  
+  .um-table th,
+  .um-table td {
+    padding: var(--spacing-sm);
+  }
+}
