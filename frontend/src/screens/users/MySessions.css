@@ -1,0 +1,181 @@
+.my-sessions-page {
+  padding: var(--spacing-xl) 0;
+}
+
+.sessions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.sessions-header h1 {
+  font-size: var(--font-size-2xl);
+  color: var(--neutral-800);
+}
+
+.sessions-filters {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.filter-btn {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 2px solid var(--neutral-200);
+  border-radius: var(--radius-full);
+  background: white;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.filter-btn:hover {
+  border-color: var(--primary-300);
+}
+
+.filter-btn.active {
+  border-color: var(--primary-500);
+  background: var(--primary-50);
+  color: var(--primary-600);
+}
+
+.sessions-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.session-card {
+  padding: var(--spacing-lg);
+}
+
+.session-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.session-therapist {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.therapist-icon {
+  font-size: var(--font-size-xl);
+  color: var(--primary-500);
+}
+
+.session-therapist h4 {
+  font-size: var(--font-size-base);
+  color: var(--neutral-800);
+  margin: 0;
+}
+
+.session-email {
+  font-size: var(--font-size-sm);
+  color: var(--neutral-500);
+}
+
+.session-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md) 0;
+  border-top: 1px solid var(--neutral-100);
+  border-bottom: 1px solid var(--neutral-100);
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--neutral-600);
+}
+
+.detail-icon {
+  color: var(--neutral-400);
+}
+
+.meeting-link {
+  color: var(--primary-500);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.meeting-link:hover {
+  color: var(--primary-700);
+  text-decoration: underline;
+}
+
+.session-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.cancellation-reason {
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--neutral-50);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  color: var(--neutral-600);
+}
+
+.reason-label {
+  font-weight: 600;
+  margin-right: var(--spacing-sm);
+}
+
+.no-sessions {
+  text-align: center;
+  padding: var(--spacing-2xl);
+}
+
+.no-sessions p {
+  color: var(--neutral-500);
+  margin-bottom: var(--spacing-lg);
+}
+
+.sessions-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: var(--spacing-lg);
+}
+
+@media (max-width: 768px) {
+  .sessions-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .session-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .session-details {
+    grid-template-columns: 1fr;
+  }
+  
+  .session-actions {
+    flex-direction: column;
+  }
+  
+  .session-actions .btn {
+    width: 100%;
+  }
+}
