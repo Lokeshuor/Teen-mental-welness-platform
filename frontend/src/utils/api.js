@@ -54,6 +54,11 @@ api.interceptors.response.use(
                 default:
                     if (response.data?.message) {
                         toast.error(response.data.message);
+                    } else if (Array.isArray(response.data?.errors) && response.data.errors.length > 0) {
+                        const first = response.data.errors[0];
+                        toast.error(first.msg ? `${first.path || first.param || ''} ${first.msg}`.trim() : 'Please check your input.');
+                    } else {
+                        toast.error('Something went wrong. Please try again.');
                     }
             }
         } else if (error.request) {

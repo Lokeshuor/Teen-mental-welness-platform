@@ -23,6 +23,10 @@ export const registerSchema = yup.object().shape({
     gradeLevel: yup.string().when('role', {
         is: 'student',
         then: () => yup.string().required('Grade level is required for students')
+    }),
+    childEmail: yup.string().when('role', {
+        is: 'parent',
+        then: () => yup.string().email('Invalid email')
     })
 });
 

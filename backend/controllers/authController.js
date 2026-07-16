@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const User = require('../models/User');
+const ParentStudent = require('../models/ParentStudent');
 const { JWT_SECRET, JWT_EXPIRE, BCRYPT_ROUNDS } = require('../config/auth');
 
 exports.register = async (req, res) => {
@@ -13,7 +14,8 @@ exports.register = async (req, res) => {
 
         const {
             email, password, first_name, last_name, role,
-            phone, date_of_birth, gender, school_id, grade_level
+            phone, date_of_birth, gender, school_id, grade_level,
+            student_email
         } = req.body;
 
         // Check if user exists
@@ -40,6 +42,16 @@ exports.register = async (req, res) => {
             grade_level
         });
 
+        // Link parent to their child if a student email was provided
+        let child_linked = false;
+        if (role === 'parent' && student_email) {
+            const student = await User.findByEmail(student_email);
+            if (student && student.role === 'student') {
+                await ParentStudent.link(userId, student.id);
+                child_linked = true;
+            }
+        }
+
         // Generate JWT
         const token = jwt.sign(
             { id: userId, email, role },
@@ -49,6 +61,7 @@ exports.register = async (req, res) => {
 
         res.status(201).json({
             message: 'User registered successfully',
+            child_linked,
             token,
             user: {
                 id: userId,

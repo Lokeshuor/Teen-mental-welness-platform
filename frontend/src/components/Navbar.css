@@ -12,7 +12,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--spacing-lg);
   min-height: 60px;
+  flex-wrap: wrap;
 }
 
 .navbar-brand {
@@ -23,6 +25,7 @@
   font-weight: 700;
   color: var(--primary-600);
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .brand-icon {
@@ -48,9 +51,48 @@
 .navbar-menu {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: var(--spacing-lg);
+  flex: 1;
 }
 
+/* ---- Nav links ---- */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.navbar-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-md);
+  color: var(--neutral-600);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.navbar-link:hover {
+  background: var(--neutral-100);
+  color: var(--primary-600);
+}
+
+.navbar-link.active {
+  background: var(--primary-50);
+  color: var(--primary-700);
+  font-weight: 600;
+}
+
+.navbar-link-icon {
+  font-size: var(--font-size-sm);
+}
+
+/* ---- User area ---- */
 .navbar-user {
   display: flex;
   align-items: center;
@@ -72,6 +114,21 @@
   text-transform: capitalize;
 }
 
+/* ---- Responsive ---- */
+@media (max-width: 1080px) {
+  .navbar-link span {
+    display: none;
+  }
+
+  .navbar-link {
+    padding: var(--spacing-sm);
+  }
+
+  .navbar-link-icon {
+    font-size: var(--font-size-base);
+  }
+}
+
 @media (max-width: 768px) {
   .navbar-toggle {
     display: block;
@@ -85,13 +142,30 @@
     padding: var(--spacing-md) 0;
     border-top: 1px solid var(--neutral-200);
     margin-top: var(--spacing-sm);
+    flex-basis: 100%;
   }
 
   .navbar-menu.open {
     display: flex;
   }
 
+  .navbar-links {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-xs);
+  }
+
+  .navbar-link {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .navbar-link span {
+    display: inline;
+  }
+
   .navbar-user {
     flex-wrap: wrap;
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid var(--neutral-100);
   }
 }

@@ -119,6 +119,19 @@ CREATE TABLE IF NOT EXISTS messages (
     INDEX idx_created (created_at)
 );
 
+-- Parent-student links (a parent can have several children; a child can have two parent accounts)
+CREATE TABLE IF NOT EXISTS parent_students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    parent_id INT NOT NULL,
+    student_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (parent_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_link (parent_id, student_id),
+    INDEX idx_parent (parent_id),
+    INDEX idx_student (student_id)
+);
+
 -- Notifications
 CREATE TABLE IF NOT EXISTS notifications (
     id INT AUTO_INCREMENT PRIMARY KEY,

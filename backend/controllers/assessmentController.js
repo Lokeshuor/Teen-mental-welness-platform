@@ -117,10 +117,8 @@ exports.getLatestAssessment = async (req, res) => {
         }
 
         const assessment = await Assessment.getLatestByStudentId(studentId);
-        if (!assessment) {
-            return res.status(404).json({ message: 'No assessment found' });
-        }
-        res.json(assessment);
+        // No assessment yet is an expected state for new students, not an error
+        res.json(assessment || null);
     } catch (error) {
         console.error('Get latest assessment error:', error);
         res.status(500).json({ message: 'Server error' });

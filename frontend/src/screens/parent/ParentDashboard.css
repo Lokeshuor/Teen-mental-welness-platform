@@ -66,11 +66,91 @@
   gap: var(--spacing-md);
 }
 
+.pd-children-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+}
+
+.pd-children-header h2 {
+  margin-bottom: 0;
+}
+
+.pd-link-form {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.pd-link-form .form-group {
+  margin-bottom: 0;
+}
+
+.pd-link-form .btn {
+  margin-top: 1.75rem;
+  flex-shrink: 0;
+}
+
 .pd-child-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+}
+
+.pd-child-top {
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
-  padding: var(--spacing-md);
+}
+
+.pd-child-unlink {
+  background: none;
+  border: none;
+  color: var(--neutral-300);
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  align-self: flex-start;
+}
+
+.pd-child-unlink:hover {
+  color: var(--danger);
+  background: var(--danger-light);
+}
+
+.pd-child-stats {
+  display: flex;
+  gap: var(--spacing-md);
+  border-top: 1px solid var(--neutral-100);
+  padding-top: var(--spacing-md);
+}
+
+.pd-child-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.pd-child-stat-label {
+  font-size: var(--font-size-xs);
+  color: var(--neutral-500);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pd-child-stat-value {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--neutral-700);
+}
+
+.pd-child-stat .badge {
+  align-self: flex-start;
 }
 
 .pd-child-avatar {
@@ -107,6 +187,12 @@
   text-align: center;
   padding: var(--spacing-2xl);
   color: var(--neutral-500);
+}
+
+.pd-no-children-hint {
+  font-size: var(--font-size-sm);
+  color: var(--neutral-400);
+  margin-top: var(--spacing-xs);
 }
 
 .pd-actions {
@@ -181,6 +267,15 @@
 @media (max-width: 480px) {
   .pd-stats-grid {
     grid-template-columns: 1fr;
+  }
+
+  .pd-link-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pd-link-form .btn {
+    margin-top: 0;
   }
   
   .pd-actions-grid {

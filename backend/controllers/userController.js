@@ -1,5 +1,62 @@
 const User = require('../models/User');
 const Assessment = require('../models/Assessment');
+const ParentStudent = require('../models/ParentStudent');
+
+exports.getMyChildren = async (req, res) => {
+    try {
+        const children = await ParentStudent.getChildren(req.user.id);
+        res.json(children);
+    } catch (error) {
+        console.error('Get my children error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+exports.linkChild = async (req, res) => {
+    try {
+        const { student_email } = req.body;
+        if (!student_email) {
+            return res.status(400).json({ message: "Please provide your child's email address" });
+        }
+
+        const student = await User.findByEmail(student_email);
+        if (!student || student.role !== 'student') {
+            return res.status(404).json({ message: 'No student account found with that email' });
+        }
+
+        if (await ParentStudent.exists(req.user.id, student.id)) {
+            return res.status(400).json({ message: 'This child is already linked to your account' });
+        }
+
+        await ParentStudent.link(req.user.id, student.id);
+        res.status(201).json({
+            message: `${student.first_name} ${student.last_name} linked to your account`,
+            child: {
+                id: student.id,
+                first_name: student.first_name,
+                last_name: student.last_name,
+                grade_level: student.grade_level,
+                school_id: student.school_id
+            }
+        });
+    } catch (error) {
+        console.error('Link child error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+exports.unlinkChild = async (req, res) => {
+    try {
+        const removed = await ParentStudent.unlink(req.user.id, req.params.studentId);
+        if (!removed) {
+            return res.status(404).json({ message: 'This child is not linked to your account' });
+        }
+        res.json({ message: 'Child unlinked from your account' });
+    } catch (error) {
+        console.error('Unlink child error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
 
 exports.getProfile = async (req, res) => {
     try {
