@@ -46,6 +46,9 @@ class User {
                 values.push(updateData[key]);
             }
         });
+        if (fields.length === 0) {
+            return { affectedRows: 0 };
+        }
         values.push(id);
         const [result] = await pool.query(
             `UPDATE users SET ${fields.join(', ')} WHERE id = ?`,

@@ -10,7 +10,7 @@ class Message {
             `INSERT INTO messages 
             (sender_id, receiver_id, content, parent_visible) 
             VALUES (?, ?, ?, ?)`,
-            [sender_id, receiver_id, content, parent_visible || true]
+            [sender_id, receiver_id, content, parent_visible === undefined ? true : parent_visible]
         );
         return result.insertId;
     }

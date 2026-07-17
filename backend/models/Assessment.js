@@ -75,6 +75,9 @@ class Assessment {
                 values.push(updateData[key]);
             }
         });
+        if (fields.length === 0) {
+            return { affectedRows: 0 };
+        }
         values.push(id);
         const [result] = await pool.query(
             `UPDATE assessments SET ${fields.join(', ')} WHERE id = ?`,
