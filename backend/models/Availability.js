@@ -27,7 +27,11 @@ class Availability {
     }
 
     static async getAvailableSlots(therapistId, date) {
-        const dayOfWeek = new Date(date).getDay();
+        // Parse the YYYY-MM-DD date in local time. `new Date('2026-07-27')`
+        // parses as UTC midnight and shifts to the previous day in negative
+        // timezones, which would match the wrong day_of_week.
+        const [year, month, day] = String(date).split('-').map(Number);
+        const dayOfWeek = new Date(year, month - 1, day).getDay();
         const [rows] = await pool.query(
             `SELECT * FROM therapist_availability 
              WHERE therapist_id = ? 
@@ -64,6 +68,9 @@ class Availability {
                 values.push(updateData[key]);
             }
         });
+        if (fields.length === 0) {
+            return { affectedRows: 0 };
+        }
         values.push(id);
         const [result] = await pool.query(
             `UPDATE therapist_availability SET ${fields.join(', ')} WHERE id = ?`,

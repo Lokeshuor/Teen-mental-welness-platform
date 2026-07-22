@@ -23,7 +23,8 @@ const NAV_ITEMS = {
         { path: '/therapist/students', icon: FaUsers, label: 'Students' },
         { path: '/therapist/availability', icon: FaClipboardCheck, label: 'Availability' },
         { path: '/therapist/messages', icon: FaComments, label: 'Messages' },
-        { path: '/therapist/reports', icon: FaChartLine, label: 'Reports' }
+        { path: '/therapist/reports', icon: FaChartLine, label: 'Reports' },
+        { path: '/therapist/profile', icon: FaUser, label: 'Profile' }
     ],
     parent: [
         { path: '/parent/dashboard', icon: FaHome, label: 'Dashboard' },

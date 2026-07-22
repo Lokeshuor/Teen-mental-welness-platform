@@ -91,6 +91,7 @@ function App() {
               <Route path="/therapist/messages" element={<TherapistMessages />} />
               <Route path="/therapist/availability" element={<AvailabilityManager />} />
               <Route path="/therapist/reports" element={<Reports />} />
+              <Route path="/therapist/profile" element={<Profile />} />
             </Route>
 
             {/* Admin Routes */}

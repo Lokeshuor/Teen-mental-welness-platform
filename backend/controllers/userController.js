@@ -60,7 +60,9 @@ exports.unlinkChild = async (req, res) => {
 
 exports.getProfile = async (req, res) => {
     try {
-        const user = await User.findById(req.user.id);
+        const user = req.user.role === 'therapist'
+            ? await User.getTherapistProfile(req.user.id)
+            : await User.findById(req.user.id);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -73,19 +75,70 @@ exports.getProfile = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
     try {
-        const { first_name, last_name, phone, date_of_birth, gender, school_id, grade_level } = req.body;
+        const {
+            first_name, last_name, phone, date_of_birth, gender, school_id, grade_level,
+            emergency_contact_name, emergency_contact_phone, specialization,
+            qualifications, experience_years, license_number, bio, consultation_fee,
+            is_available
+        } = req.body;
+        // HTML forms submit unfilled optional inputs as empty strings. MySQL
+        // accepts NULL for these columns, but rejects '' for DATE and ENUMs.
+        const nullIfBlank = (value) => (
+            typeof value === 'string' && value.trim() === '' ? null : value
+        );
+
+        if (!first_name?.trim() || !last_name?.trim()) {
+            return res.status(400).json({ message: 'First name and last name are required' });
+        }
+
+        if (req.user.role === 'therapist') {
+            const requiredProfessionalFields = {
+                specialization: 'Specialization',
+                qualifications: 'Qualifications',
+                experience_years: 'Years of experience',
+                license_number: 'License number',
+                bio: 'Professional bio',
+                consultation_fee: 'Consultation fee'
+            };
+            const missingField = Object.entries(requiredProfessionalFields)
+                .find(([field]) => req.body[field] === undefined || req.body[field] === null || String(req.body[field]).trim() === '');
+
+            if (missingField) {
+                return res.status(400).json({ message: `${missingField[1]} is required for a therapist profile` });
+            }
+
+            if (Number(experience_years) < 0 || Number(consultation_fee) < 0) {
+                return res.status(400).json({ message: 'Experience and consultation fee cannot be negative' });
+            }
+        }
         
         await User.update(req.user.id, {
-            first_name,
-            last_name,
-            phone,
-            date_of_birth,
-            gender,
-            school_id,
-            grade_level
+            first_name: first_name.trim(),
+            last_name: last_name.trim(),
+            phone: nullIfBlank(phone),
+            date_of_birth: nullIfBlank(date_of_birth),
+            gender: nullIfBlank(gender),
+            school_id: nullIfBlank(school_id),
+            grade_level: nullIfBlank(grade_level),
+            emergency_contact_name: nullIfBlank(emergency_contact_name),
+            emergency_contact_phone: nullIfBlank(emergency_contact_phone)
         });
 
-        const user = await User.findById(req.user.id);
+        if (req.user.role === 'therapist') {
+            await User.updateTherapistProfile(req.user.id, {
+                specialization: specialization?.trim(),
+                qualifications: qualifications?.trim(),
+                experience_years: Number(experience_years),
+                license_number: license_number?.trim(),
+                bio: bio?.trim(),
+                consultation_fee: Number(consultation_fee),
+                is_available: is_available ? 1 : 0
+            });
+        }
+
+        const user = req.user.role === 'therapist'
+            ? await User.getTherapistProfile(req.user.id)
+            : await User.findById(req.user.id);
         res.json({
             message: 'Profile updated successfully',
             user

@@ -23,6 +23,7 @@ export const ROUTES = {
     THERAPIST_MESSAGES: '/therapist/messages',
     THERAPIST_AVAILABILITY: '/therapist/availability',
     THERAPIST_REPORTS: '/therapist/reports',
+    THERAPIST_PROFILE: '/therapist/profile',
     
     // Parent
     PARENT_DASHBOARD: '/parent/dashboard',
@@ -54,6 +55,7 @@ export const ROLE_ROUTES = {
         ROUTES.THERAPIST_MESSAGES,
         ROUTES.THERAPIST_AVAILABILITY,
         ROUTES.THERAPIST_REPORTS,
+        ROUTES.THERAPIST_PROFILE,
     ],
     parent: [
         ROUTES.PARENT_DASHBOARD,

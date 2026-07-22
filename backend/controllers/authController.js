@@ -42,6 +42,11 @@ exports.register = async (req, res) => {
             grade_level
         });
 
+        // Therapists need a profile row so they appear as bookable in listings
+        if (role === 'therapist') {
+            await User.createTherapistProfile(userId);
+        }
+
         // Link parent to their child if a student email was provided
         let child_linked = false;
         if (role === 'parent' && student_email) {

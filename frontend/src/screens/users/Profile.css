@@ -2,6 +2,11 @@
   padding: var(--spacing-xl) 0;
 }
 
+.required-indicator {
+  color: #dc2626;
+  font-weight: 700;
+}
+
 .profile-header {
   text-align: center;
   margin-bottom: var(--spacing-xl);
@@ -60,6 +65,67 @@
   border-top: 1px solid var(--neutral-200);
   display: flex;
   justify-content: flex-end;
+}
+
+.profile-section-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  margin: var(--spacing-xl) 0 var(--spacing-lg);
+  padding-top: var(--spacing-xl);
+  border-top: 1px solid var(--neutral-200);
+  color: var(--primary-600);
+}
+
+.profile-section-heading h2 {
+  margin: 0 0 var(--spacing-xs);
+  color: var(--neutral-800);
+  font-size: var(--font-size-xl);
+}
+
+.profile-section-heading p {
+  margin: 0;
+  color: var(--neutral-500);
+}
+
+.profile-textarea {
+  resize: vertical;
+  min-height: 120px;
+  padding: var(--spacing-md);
+}
+
+.availability-toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.availability-toggle input {
+  margin-top: 4px;
+}
+
+.availability-toggle span {
+  display: flex;
+  flex-direction: column;
+  color: var(--neutral-700);
+}
+
+.availability-toggle small {
+  margin-top: 2px;
+  color: var(--neutral-500);
+}
+
+.profile-readonly-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-md);
+  color: var(--neutral-600);
+  font-size: var(--font-size-sm);
 }
 
 .profile-loading {
