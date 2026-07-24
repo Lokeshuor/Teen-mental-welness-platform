@@ -11,7 +11,8 @@ const {
     getTherapistSessions,
     getUpcomingSessions,
     updateSessionStatus,
-    cancelSession
+    cancelSession,
+    rateSession
 } = require('../controllers/sessionController');
 const authenticate = require('../middleware/auth');
 const roleCheck = require('../middleware/roleCheck');
@@ -33,5 +34,6 @@ router.get('/therapist', authenticate, roleCheck('therapist'), getTherapistSessi
 router.get('/upcoming', authenticate, getUpcomingSessions);
 router.put('/:id/status', authenticate, updateSessionStatus);
 router.put('/:id/cancel', authenticate, cancelSession);
+router.post('/:id/rating', authenticate, roleCheck('student'), rateSession);
 
 module.exports = router;

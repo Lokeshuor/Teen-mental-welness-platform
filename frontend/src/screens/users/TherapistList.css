@@ -45,6 +45,10 @@
   min-width: 150px;
 }
 
+.therapists-filters .form-select:last-child {
+  min-width: 175px;
+}
+
 .therapists-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -92,6 +96,21 @@
   font-weight: 500;
   font-size: var(--font-size-sm);
   margin-bottom: var(--spacing-sm);
+}
+
+.therapist-detail,
+.therapist-bio {
+  color: var(--neutral-600);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+  margin: 0 0 var(--spacing-sm);
+}
+
+.therapist-bio {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }
 
 .therapist-stats {

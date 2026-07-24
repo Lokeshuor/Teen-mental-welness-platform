@@ -11,6 +11,7 @@ const assessmentRoutes = require('./routes/assessmentRoutes');
 const sessionRoutes = require('./routes/sessionRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 const reportRoutes = require('./routes/reportRoutes');
+const Session = require('./models/Session');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -45,9 +46,20 @@ app.use((err, req, res, next) => {
     res.status(500).json({ message: 'Something went wrong' });
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-});
+const startServer = () => {
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+        console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+
+        // Do not delay the API startup while the database is connecting.
+        // This creates the table for existing databases on the first healthy
+        // connection and is safe to run repeatedly.
+        Session.ensureRatingsTable()
+            .then(() => console.log('Session ratings table is ready'))
+            .catch((error) => console.error('Could not initialize session ratings table:', error.message));
+    });
+};
+
+startServer();
 
 module.exports = app;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaStar, FaUserMd, FaCalendarCheck, FaSearch } from 'react-icons/fa';
 import api from '../../utils/api';
@@ -7,63 +7,62 @@ import './TherapistList.css';
 const TherapistList = () => {
     const navigate = useNavigate();
     const [therapists, setTherapists] = useState([]);
-    const [filteredTherapists, setFilteredTherapists] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [specializationFilter, setSpecializationFilter] = useState('');
+    const [availabilityFilter, setAvailabilityFilter] = useState('');
 
     useEffect(() => {
         fetchTherapists();
     }, []);
 
-    useEffect(() => {
-        filterTherapists();
-    }, [searchQuery, specializationFilter, therapists]);
-
     const fetchTherapists = async () => {
         try {
             const response = await api.get('/sessions/therapists');
             setTherapists(response.data || []);
-            setFilteredTherapists(response.data || []);
-            setIsLoading(false);
         } catch (error) {
             console.error('Fetch therapists error:', error);
+        } finally {
             setIsLoading(false);
         }
     };
 
-    const filterTherapists = () => {
-        let filtered = therapists;
+    const splitSpecializations = (specialization) => (
+        String(specialization || '')
+            .split(/[,;|]/)
+            .map((item) => item.trim())
+            .filter(Boolean)
+    );
 
-        if (searchQuery) {
-            const query = searchQuery.toLowerCase();
-            filtered = filtered.filter(t => 
-                t.first_name.toLowerCase().includes(query) ||
-                t.last_name.toLowerCase().includes(query) ||
-                (t.specialization && t.specialization.toLowerCase().includes(query))
-            );
-        }
-
-        if (specializationFilter) {
-            filtered = filtered.filter(t => 
-                t.specialization && t.specialization.toLowerCase().includes(specializationFilter.toLowerCase())
-            );
-        }
-
-        setFilteredTherapists(filtered);
-    };
-
-    const getUniqueSpecializations = () => {
+    const specializations = useMemo(() => {
         const specs = new Set();
         therapists.forEach(t => {
-            if (t.specialization) {
-                t.specialization.split(',').forEach(s => {
-                    specs.add(s.trim());
-                });
-            }
+            splitSpecializations(t.specialization).forEach((specialization) => specs.add(specialization));
         });
-        return Array.from(specs);
-    };
+        return Array.from(specs).sort((a, b) => a.localeCompare(b));
+    }, [therapists]);
+
+    const filteredTherapists = useMemo(() => {
+        const query = searchQuery.trim().toLowerCase();
+
+        return therapists.filter((therapist) => {
+            const fullName = `${therapist.first_name || ''} ${therapist.last_name || ''}`.toLowerCase();
+            const searchableDetails = [
+                therapist.specialization,
+                therapist.qualifications,
+                therapist.bio
+            ].filter(Boolean).join(' ').toLowerCase();
+            const matchesSearch = !query || fullName.includes(query) || searchableDetails.includes(query);
+            const matchesSpecialization = !specializationFilter || splitSpecializations(therapist.specialization)
+                .some((specialization) => specialization.toLowerCase() === specializationFilter.toLowerCase());
+            const isAvailable = Boolean(Number(therapist.is_available));
+            const matchesAvailability = !availabilityFilter || (
+                availabilityFilter === 'available' ? isAvailable : !isAvailable
+            );
+
+            return matchesSearch && matchesSpecialization && matchesAvailability;
+        });
+    }, [therapists, searchQuery, specializationFilter, availabilityFilter]);
 
     const handleBookSession = (therapistId) => {
         navigate(`/student/book-session/${therapistId}`);
@@ -77,8 +76,6 @@ const TherapistList = () => {
             </div>
         );
     }
-
-    const specializations = getUniqueSpecializations();
 
     return (
         <div className="therapists-page">
@@ -109,6 +106,16 @@ const TherapistList = () => {
                             <option key={spec} value={spec}>{spec}</option>
                         ))}
                     </select>
+                    <select
+                        className="form-select"
+                        value={availabilityFilter}
+                        onChange={(e) => setAvailabilityFilter(e.target.value)}
+                        aria-label="Filter therapists by availability"
+                    >
+                        <option value="">All Availability</option>
+                        <option value="available">Available to book</option>
+                        <option value="unavailable">Unavailable</option>
+                    </select>
                 </div>
 
                 {filteredTherapists.length === 0 ? (
@@ -127,6 +134,9 @@ const TherapistList = () => {
                                     <p className="specialization">
                                         {therapist.specialization || 'General Therapist'}
                                     </p>
+                                    {therapist.qualifications && (
+                                        <p className="therapist-detail"><strong>Qualifications:</strong> {therapist.qualifications}</p>
+                                    )}
                                     <div className="therapist-stats">
                                         <span className="rating">
                                             <FaStar className="star-icon" />
@@ -136,11 +146,16 @@ const TherapistList = () => {
                                             🎓 {therapist.experience_years || 0} years
                                         </span>
                                         <span className="fee">
-                                            💰 ${therapist.consultation_fee || 0}/session
+                                            £{Number(therapist.consultation_fee || 0).toFixed(2)} / session
                                         </span>
+                                        <span>Completed sessions: {therapist.total_sessions || 0}</span>
                                     </div>
+                                    {therapist.license_number && (
+                                        <p className="therapist-detail"><strong>Registration:</strong> {therapist.license_number}</p>
+                                    )}
+                                    {therapist.bio && <p className="therapist-bio">{therapist.bio}</p>}
                                     <div className="availability-status">
-                                        {therapist.is_available ? (
+                                        {Boolean(Number(therapist.is_available)) ? (
                                             <span className="available">✅ Available</span>
                                         ) : (
                                             <span className="unavailable">❌ Unavailable</span>
@@ -151,7 +166,7 @@ const TherapistList = () => {
                                     <button
                                         className="btn btn-primary btn-sm"
                                         onClick={() => handleBookSession(therapist.id)}
-                                        disabled={!therapist.is_available}
+                                        disabled={!Boolean(Number(therapist.is_available))}
                                     >
                                         <FaCalendarCheck /> Book Session
                                     </button>

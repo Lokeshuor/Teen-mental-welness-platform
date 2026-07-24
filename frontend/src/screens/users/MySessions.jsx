@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { 
     FaCalendarAlt, FaClock, FaUserMd, FaCheck, FaTimes, 
-    FaVideo, FaUser, FaExclamationCircle
+    FaVideo, FaUser, FaExclamationCircle, FaStar
 } from 'react-icons/fa';
 import { format, parseISO } from 'date-fns';
 import api from '../../utils/api';
@@ -14,6 +14,7 @@ const MySessions = () => {
     const [sessions, setSessions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [filter, setFilter] = useState('all');
+    const [ratingSessionId, setRatingSessionId] = useState(null);
 
     useEffect(() => {
         fetchSessions();
@@ -39,6 +40,21 @@ const MySessions = () => {
             fetchSessions();
         } catch (error) {
             console.error('Cancel session error:', error);
+        }
+    };
+
+    const handleRating = async (session, rating) => {
+        setRatingSessionId(session.id);
+        try {
+            await api.post(`/sessions/${session.id}/rating`, { rating });
+            setSessions((currentSessions) => currentSessions.map((item) => (
+                item.id === session.id ? { ...item, student_rating: rating } : item
+            )));
+            toast.success('Thank you for your rating');
+        } catch (error) {
+            console.error('Submit rating error:', error);
+        } finally {
+            setRatingSessionId(null);
         }
     };
 
@@ -200,6 +216,26 @@ const MySessions = () => {
                                                 <FaVideo /> Join Now
                                             </a>
                                         )}
+                                    </div>
+                                )}
+
+                                {session.status === 'completed' && (
+                                    <div className="session-rating" aria-label={`Rate your session with ${session.therapist_first}`}>
+                                        <span>{session.student_rating ? 'Your rating:' : 'Rate this session:'}</span>
+                                        <div className="rating-buttons">
+                                            {[1, 2, 3, 4, 5].map((rating) => (
+                                                <button
+                                                    key={rating}
+                                                    type="button"
+                                                    className={`rating-button ${Number(session.student_rating) >= rating ? 'selected' : ''}`}
+                                                    onClick={() => handleRating(session, rating)}
+                                                    disabled={ratingSessionId === session.id}
+                                                    aria-label={`${rating} out of 5 stars`}
+                                                >
+                                                    <FaStar />
+                                                </button>
+                                            ))}
+                                        </div>
                                     </div>
                                 )}
 

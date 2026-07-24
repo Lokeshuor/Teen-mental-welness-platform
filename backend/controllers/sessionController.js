@@ -237,3 +237,47 @@ exports.cancelSession = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+exports.rateSession = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const rating = Number(req.body.rating);
+        const feedback = typeof req.body.feedback === 'string' ? req.body.feedback.trim() : '';
+
+        if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+            return res.status(400).json({ message: 'Rating must be a whole number from 1 to 5' });
+        }
+        if (feedback.length > 1000) {
+            return res.status(400).json({ message: 'Feedback must be 1,000 characters or fewer' });
+        }
+
+        const session = await Session.getById(id);
+        if (!session) {
+            return res.status(404).json({ message: 'Session not found' });
+        }
+        if (req.user.role !== 'student' || session.student_id !== req.user.id) {
+            return res.status(403).json({ message: 'Only the student who attended this session can submit a rating' });
+        }
+        if (session.status !== 'completed') {
+            return res.status(400).json({ message: 'You can rate a therapist after the session is completed' });
+        }
+
+        const therapist = await Session.submitRating({
+            sessionId: session.id,
+            studentId: req.user.id,
+            therapistId: session.therapist_id,
+            rating,
+            feedback
+        });
+
+        res.json({
+            message: 'Thank you for your rating',
+            rating,
+            feedback,
+            therapist
+        });
+    } catch (error) {
+        console.error('Rate session error:', error);
+        res.status(500).json({ message: 'Unable to submit rating. Please try again.' });
+    }
+};
