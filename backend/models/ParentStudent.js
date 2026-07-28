@@ -33,7 +33,21 @@ class ParentStudent {
                        AND s.status = 'scheduled'
                        AND s.session_date >= CURDATE()) AS upcoming_sessions,
                     la.risk_level AS latest_risk_level,
-                    la.completed_at AS latest_assessment_at
+                    la.total_score AS latest_assessment_score,
+                    la.recommendation AS latest_recommendation,
+                    la.completed_at AS latest_assessment_at,
+                    (SELECT s.session_date FROM sessions s
+                     WHERE s.student_id = u.id
+                       AND s.status = 'scheduled'
+                       AND s.session_date >= CURDATE()
+                     ORDER BY s.session_date, s.start_time
+                     LIMIT 1) AS next_session_date,
+                    (SELECT s.start_time FROM sessions s
+                     WHERE s.student_id = u.id
+                       AND s.status = 'scheduled'
+                       AND s.session_date >= CURDATE()
+                     ORDER BY s.session_date, s.start_time
+                     LIMIT 1) AS next_session_time
              FROM parent_students ps
              JOIN users u ON u.id = ps.student_id
              LEFT JOIN assessments la ON la.id = (
