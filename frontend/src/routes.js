@@ -27,7 +27,6 @@ export const ROUTES = {
     
     // Parent
     PARENT_DASHBOARD: '/parent/dashboard',
-    PARENT_NOTIFICATIONS: '/parent/notifications',
     
     // Admin
     ADMIN_DASHBOARD: '/admin/dashboard',
@@ -59,7 +58,6 @@ export const ROLE_ROUTES = {
     ],
     parent: [
         ROUTES.PARENT_DASHBOARD,
-        ROUTES.PARENT_NOTIFICATIONS,
     ],
     admin: [
         ROUTES.ADMIN_DASHBOARD,

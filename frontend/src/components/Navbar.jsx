@@ -3,7 +3,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import {
     FaUser, FaSignOutAlt, FaBars, FaTimes, FaHome,
     FaClipboardCheck, FaUserMd, FaCalendarAlt, FaComments,
-    FaUsers, FaChartLine, FaCog, FaBell
+    FaUsers, FaChartLine, FaCog
 } from 'react-icons/fa';
 import { getUser, logout } from '../utils/auth';
 import './Navbar.css';
@@ -27,8 +27,7 @@ const NAV_ITEMS = {
         { path: '/therapist/profile', icon: FaUser, label: 'Profile' }
     ],
     parent: [
-        { path: '/parent/dashboard', icon: FaHome, label: 'Dashboard' },
-        { path: '/parent/notifications', icon: FaBell, label: 'Notifications' }
+        { path: '/parent/dashboard', icon: FaHome, label: 'Dashboard' }
     ],
     admin: [
         { path: '/admin/dashboard', icon: FaHome, label: 'Dashboard' },

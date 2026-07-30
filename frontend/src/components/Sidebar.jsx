@@ -11,8 +11,7 @@ import {
     FaUsers,
     FaCog,
     FaBars,
-    FaTimes,
-    FaBell
+    FaTimes
 } from 'react-icons/fa';
 import { getRole } from '../utils/auth';
 
@@ -57,8 +56,7 @@ const Sidebar = ({ isOpen, onClose }) => {
             case 'parent':
                 return [
                     ...commonItems.slice(0, 1),
-                    { path: '/parent/notifications', icon: FaBell, label: 'Notifications' },
-                    ...commonItems.slice(1),
+                    { path: '/parent/dashboard', icon: FaUser, label: 'Wellness Updates' },
                 ];
             default:
                 return commonItems;

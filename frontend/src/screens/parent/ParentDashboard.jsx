@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { FaBell, FaUser, FaClipboardCheck, FaCalendarAlt, FaPlus, FaTimes } from 'react-icons/fa';
+import { FaUser, FaClipboardCheck, FaCalendarAlt, FaPlus, FaTimes } from 'react-icons/fa';
 import api from '../../utils/api';
 import { getUser } from '../../utils/auth';
 import './ParentDashboard.css';
@@ -64,6 +63,21 @@ const ParentDashboard = () => {
     const getRiskBadge = (level) => {
         const badges = { low: 'badge-low', moderate: 'badge-moderate', high: 'badge-high' };
         return `badge ${badges[level] || 'badge-low'}`;
+    };
+
+    const formatDate = (date) => {
+        if (!date) return null;
+        return new Intl.DateTimeFormat('en-GB', {
+            day: 'numeric', month: 'short', year: 'numeric'
+        }).format(new Date(date));
+    };
+
+    const formatTime = (time) => {
+        if (!time) return null;
+        const [hours, minutes] = String(time).split(':');
+        return new Intl.DateTimeFormat('en-GB', {
+            hour: 'numeric', minute: '2-digit', hour12: true
+        }).format(new Date(2000, 0, 1, Number(hours), Number(minutes)));
     };
 
     if (isLoading) {
@@ -186,21 +200,46 @@ const ParentDashboard = () => {
                     )}
                 </div>
 
-                <div className="pd-actions">
-                    <h2>Quick Actions</h2>
-                    <div className="pd-actions-grid">
-                        <Link to="/parent/notifications" className="pd-action-card card">
-                            <FaBell className="pd-action-icon" />
-                            <h4>Notifications</h4>
-                            <p>View updates about your child</p>
-                        </Link>
-                        <Link to="/parent/notifications" className="pd-action-card card">
-                            <FaClipboardCheck className="pd-action-icon" />
-                            <h4>Wellness Updates</h4>
-                            <p>Assessment and session alerts</p>
-                        </Link>
+                <section className="pd-wellness-updates" aria-labelledby="wellness-updates-heading">
+                    <div className="pd-wellness-header">
+                        <div>
+                            <h2 id="wellness-updates-heading"><FaClipboardCheck /> Wellness Updates</h2>
+                            <p>Latest assessment and session information for your linked children.</p>
+                        </div>
                     </div>
-                </div>
+
+                    {children.length === 0 ? (
+                        <div className="pd-no-children card">
+                            <p>Link a child to view their wellness updates.</p>
+                        </div>
+                    ) : (
+                        <div className="pd-wellness-grid">
+                            {children.map((child) => (
+                                <article key={child.id} className="pd-wellness-card card">
+                                    <h3>{child.first_name} {child.last_name}</h3>
+                                    <div className="pd-wellness-item">
+                                        <span>Latest wellness check</span>
+                                        {child.latest_risk_level ? (
+                                            <div>
+                                                <span className={getRiskBadge(child.latest_risk_level)}>{child.latest_risk_level} risk</span>
+                                                <small>{formatDate(child.latest_assessment_at)}</small>
+                                            </div>
+                                        ) : <strong>No assessment completed yet</strong>}
+                                    </div>
+                                    {child.latest_recommendation && (
+                                        <p className="pd-recommendation">{child.latest_recommendation}</p>
+                                    )}
+                                    <div className="pd-wellness-item">
+                                        <span>Next session</span>
+                                        {child.next_session_date ? (
+                                            <strong>{formatDate(child.next_session_date)}{child.next_session_time ? ` at ${formatTime(child.next_session_time)}` : ''}</strong>
+                                        ) : <strong>No upcoming session</strong>}
+                                    </div>
+                                </article>
+                            ))}
+                        </div>
+                    )}
+                </section>
             </div>
         </div>
     );

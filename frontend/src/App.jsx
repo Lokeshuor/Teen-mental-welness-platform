@@ -36,7 +36,6 @@ import SystemSettings from './screens/admin/SystemSettings';
 
 // Screens - Parent
 import ParentDashboard from './screens/parent/ParentDashboard';
-import ParentNotifications from './screens/parent/ParentNotifications';
 
 function App() {
   useEffect(() => {
@@ -105,7 +104,6 @@ function App() {
             {/* Parent Routes */}
             <Route element={<ProtectedRoute allowedRoles={['parent']} />}>
               <Route path="/parent/dashboard" element={<ParentDashboard />} />
-              <Route path="/parent/notifications" element={<ParentNotifications />} />
             </Route>
 
             {/* 404 */}
