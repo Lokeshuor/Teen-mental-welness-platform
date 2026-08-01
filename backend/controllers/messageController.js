@@ -32,13 +32,9 @@ exports.getConversation = async (req, res) => {
         const { userId } = req.params;
         const limit = parseInt(req.query.limit) || 50;
 
-        // Check authorization - users can only view their own conversations
-        if (req.user.role !== 'admin' && 
-            req.user.id !== parseInt(userId) && 
-            req.user.id !== req.user.id) {
-            return res.status(403).json({ message: 'Unauthorized' });
-        }
-
+        // The conversation is always scoped to the authenticated user
+        // (getConversation only returns messages sent to/from req.user.id),
+        // so any logged-in user may fetch their own thread with userId.
         const messages = await Message.getConversation(req.user.id, userId, limit);
         res.json(messages);
     } catch (error) {

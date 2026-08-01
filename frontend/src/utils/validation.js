@@ -36,11 +36,15 @@ export const assessmentSchema = yup.object().shape({
     ).required('Please answer all questions')
 });
 
+// Date and time are managed outside react-hook-form (component state) and
+// validated in the submit handler, so the schema only covers registered fields.
 export const sessionBookingSchema = yup.object().shape({
-    therapistId: yup.number().required('Please select a therapist'),
-    sessionDate: yup.string().required('Please select a date'),
-    startTime: yup.string().required('Please select a time'),
-    endTime: yup.string().required('Please select an end time')
+    therapistId: yup.number()
+        .typeError('Please select a therapist')
+        .required('Please select a therapist'),
+    sessionType: yup.string()
+        .oneOf(['online', 'in-person'])
+        .required('Please select a session type')
 });
 
 export const messageSchema = yup.object().shape({
