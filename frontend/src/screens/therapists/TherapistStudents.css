@@ -1,120 +1,328 @@
+/* Prefixed `tstu-` so these rules stay isolated from TherapistSessions.css,
+   which owns the `ts-` prefix in the same global CSS bundle. */
 .therapist-students {
   padding: var(--spacing-xl) 0;
 }
 
-.ts-header {
+.tstu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
   margin-bottom: var(--spacing-lg);
 }
 
-.ts-header h1 {
+.tstu-header h1 {
   font-size: var(--font-size-2xl);
   color: var(--neutral-800);
+  margin: 0;
 }
 
-.ts-header p {
+.tstu-header-text p {
+  color: var(--neutral-500);
+  margin: 0;
+}
+
+.tstu-stats {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.tstu-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 84px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: white;
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.tstu-stat-value {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--primary-600);
+  line-height: 1.2;
+}
+
+.tstu-stat-label {
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: var(--neutral-500);
 }
 
-.ts-search {
-  position: relative;
-  margin-bottom: var(--spacing-xl);
-  max-width: 400px;
+/* Toolbar */
+.tstu-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
 }
 
-.ts-search .search-icon {
+.tstu-search {
+  position: relative;
+  flex: 1 1 280px;
+  max-width: 420px;
+}
+
+.tstu-search-icon {
   position: absolute;
   left: var(--spacing-md);
   top: 50%;
   transform: translateY(-50%);
   color: var(--neutral-400);
+  pointer-events: none;
 }
 
-.ts-search .form-input {
-  padding-left: var(--spacing-xl);
+.tstu-search .form-input {
+  padding-left: calc(var(--spacing-md) * 2.5);
+  padding-right: calc(var(--spacing-md) * 2.5);
 }
 
-.ts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--spacing-md);
-}
-
-.ts-card {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md);
-}
-
-.ts-card-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--primary-100);
+.tstu-search-clear {
+  position: absolute;
+  right: var(--spacing-sm);
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--primary-500);
-  font-size: var(--font-size-xl);
-  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--neutral-100);
+  color: var(--neutral-500);
+  cursor: pointer;
+  transition: all var(--transition-fast);
 }
 
-.ts-card-info {
+.tstu-search-clear:hover {
+  background: var(--neutral-200);
+  color: var(--neutral-700);
+}
+
+.tstu-filters {
+  display: inline-flex;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs);
+  background: var(--neutral-100);
+  border-radius: var(--radius-full);
+}
+
+.tstu-filter {
+  padding: var(--spacing-xs) var(--spacing-md);
+  border: none;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--neutral-600);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tstu-filter:hover {
+  color: var(--primary-600);
+}
+
+.tstu-filter.is-active {
+  background: white;
+  color: var(--primary-600);
+  box-shadow: var(--shadow-sm);
+}
+
+.tstu-result-count {
+  font-size: var(--font-size-sm);
+  color: var(--neutral-500);
+  margin-bottom: var(--spacing-md);
+}
+
+/* Cards */
+.tstu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.tstu-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+}
+
+.tstu-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+}
+
+.tstu-avatar {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.tstu-identity {
   flex: 1;
   min-width: 0;
 }
 
-.ts-card-info h4 {
+.tstu-identity h4 {
   font-size: var(--font-size-base);
   color: var(--neutral-800);
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.student-email {
+.tstu-email {
   font-size: var(--font-size-sm);
   color: var(--neutral-500);
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.student-details {
-  display: flex;
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-xs);
-}
-
-.student-details .detail {
-  font-size: var(--font-size-xs);
-  color: var(--neutral-400);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-}
-
-.status {
+.tstu-status {
+  flex-shrink: 0;
   font-size: var(--font-size-xs);
   font-weight: 600;
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--radius-full);
 }
 
-.status.active {
+.tstu-status.is-active {
   background: var(--success-light);
   color: var(--success);
 }
 
-.status.inactive {
-  background: var(--danger-light);
-  color: var(--danger);
+.tstu-status.is-inactive {
+  background: var(--neutral-100);
+  color: var(--neutral-500);
 }
 
-.ts-empty {
+.tstu-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--neutral-100);
+}
+
+.tstu-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--neutral-50);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xs);
+  color: var(--neutral-600);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tstu-chip svg {
+  color: var(--primary-500);
+  flex-shrink: 0;
+}
+
+/* Empty & loading */
+.tstu-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
   text-align: center;
   padding: var(--spacing-2xl);
   color: var(--neutral-500);
 }
 
+.tstu-empty-icon {
+  font-size: var(--font-size-3xl);
+  color: var(--neutral-300);
+  margin-bottom: var(--spacing-xs);
+}
+
+.tstu-empty h3 {
+  font-size: var(--font-size-lg);
+  color: var(--neutral-700);
+  margin: 0;
+}
+
+.tstu-empty p {
+  margin: 0;
+}
+
+.tstu-empty .btn {
+  margin-top: var(--spacing-sm);
+}
+
+.tstu-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: var(--spacing-lg);
+  color: var(--neutral-500);
+}
+
 @media (max-width: 768px) {
-  .ts-grid {
+  .tstu-header {
+    align-items: flex-start;
+  }
+
+  .tstu-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tstu-search {
+    max-width: none;
+  }
+
+  .tstu-filters {
+    justify-content: space-between;
+  }
+
+  .tstu-filter {
+    flex: 1;
+  }
+
+  .tstu-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.tstu-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.tstu-actions .btn {
+  flex: 1;
 }

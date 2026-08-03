@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-    FaCalendarAlt, FaUsers, FaComments, FaChartLine, 
+    FaCalendarAlt, FaUsers, FaComments,
     FaCheckCircle, FaClock, FaExclamationCircle
 } from 'react-icons/fa';
 import api from '../../utils/api';
@@ -142,11 +142,6 @@ const TherapistDashboard = () => {
                             <FaComments className="td-action-icon" />
                             <h4>Messages</h4>
                             <p>Respond to students</p>
-                        </Link>
-                        <Link to="/therapist/reports" className="td-action-card card">
-                            <FaChartLine className="td-action-icon" />
-                            <h4>Reports</h4>
-                            <p>View practice analytics</p>
                         </Link>
                     </div>
                 </div>

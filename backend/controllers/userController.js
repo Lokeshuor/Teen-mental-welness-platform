@@ -12,6 +12,35 @@ exports.getMyChildren = async (req, res) => {
     }
 };
 
+exports.getChildrenSessions = async (req, res) => {
+    try {
+        const rawChildId = req.query.childId;
+        let childId = null;
+        if (rawChildId) {
+            const parsed = Number.parseInt(rawChildId, 10);
+            if (!Number.isInteger(parsed) || parsed < 1) {
+                return res.status(400).json({ message: 'Invalid child id' });
+            }
+            // Only children actually linked to this parent are readable.
+            if (!(await ParentStudent.exists(req.user.id, parsed))) {
+                return res.status(403).json({ message: 'This child is not linked to your account' });
+            }
+            childId = parsed;
+        }
+
+        const parsedLimit = Number.parseInt(req.query.limit, 10);
+        const limit = Number.isInteger(parsedLimit) && parsedLimit > 0
+            ? Math.min(parsedLimit, 100)
+            : 50;
+
+        const sessions = await ParentStudent.getChildrenSessions(req.user.id, { childId, limit });
+        res.json(sessions);
+    } catch (error) {
+        console.error('Get children sessions error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 exports.linkChild = async (req, res) => {
     try {
         const { student_email } = req.body;

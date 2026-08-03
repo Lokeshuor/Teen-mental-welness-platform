@@ -33,7 +33,7 @@ const Dashboard = () => {
             const [assessmentsRes, sessionsRes, messagesRes, therapistsRes, latestAssessmentRes] = await Promise.all([
                 api.get('/assessments/student'),
                 api.get('/sessions/upcoming'),
-                api.get('/messages/recent?limit=5'),
+                api.get('/messages/unread'),
                 api.get('/sessions/therapists'),
                 api.get('/assessments/latest').catch(() => ({ data: null }))
             ]);
@@ -41,7 +41,7 @@ const Dashboard = () => {
             setStats({
                 assessments: assessmentsRes.data?.length || 0,
                 upcomingSessions: sessionsRes.data?.length || 0,
-                messages: messagesRes.data?.length || 0,
+                messages: messagesRes.data?.unread || 0,
                 therapistCount: therapistsRes.data?.length || 0
             });
             setLatestAssessment(latestAssessmentRes.data);

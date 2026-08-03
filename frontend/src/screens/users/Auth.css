@@ -197,12 +197,6 @@
   color: var(--primary-800);
 }
 
-.forgot-link {
-  display: inline-block;
-  margin-top: var(--spacing-sm);
-  font-size: var(--font-size-sm);
-}
-
 .form-optional {
   font-weight: 400;
   color: var(--neutral-400);

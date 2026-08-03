@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaStar, FaUserMd, FaCalendarCheck, FaSearch } from 'react-icons/fa';
+import { FaStar, FaUserMd, FaCalendarCheck, FaSearch, FaComments, FaIdBadge } from 'react-icons/fa';
 import api from '../../utils/api';
+import Modal from '../../components/Modal';
 import './TherapistList.css';
 
 const TherapistList = () => {
@@ -11,6 +12,7 @@ const TherapistList = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [specializationFilter, setSpecializationFilter] = useState('');
     const [availabilityFilter, setAvailabilityFilter] = useState('');
+    const [profileTherapist, setProfileTherapist] = useState(null);
 
     useEffect(() => {
         fetchTherapists();
@@ -67,6 +69,12 @@ const TherapistList = () => {
     const handleBookSession = (therapistId) => {
         navigate(`/student/book-session/${therapistId}`);
     };
+
+    const handleMessageTherapist = (therapistId) => {
+        navigate(`/student/messages/${therapistId}`);
+    };
+
+    const isAvailable = (therapist) => Boolean(Number(therapist.is_available));
 
     if (isLoading) {
         return (
@@ -155,7 +163,7 @@ const TherapistList = () => {
                                     )}
                                     {therapist.bio && <p className="therapist-bio">{therapist.bio}</p>}
                                     <div className="availability-status">
-                                        {Boolean(Number(therapist.is_available)) ? (
+                                        {isAvailable(therapist) ? (
                                             <span className="available">✅ Available</span>
                                         ) : (
                                             <span className="unavailable">❌ Unavailable</span>
@@ -166,15 +174,126 @@ const TherapistList = () => {
                                     <button
                                         className="btn btn-primary btn-sm"
                                         onClick={() => handleBookSession(therapist.id)}
-                                        disabled={!Boolean(Number(therapist.is_available))}
+                                        disabled={!isAvailable(therapist)}
                                     >
                                         <FaCalendarCheck /> Book Session
+                                    </button>
+                                    <button
+                                        className="btn btn-outline btn-sm"
+                                        onClick={() => handleMessageTherapist(therapist.id)}
+                                    >
+                                        <FaComments /> Message
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="therapist-profile-link"
+                                        onClick={() => setProfileTherapist(therapist)}
+                                    >
+                                        <FaIdBadge /> View full profile
                                     </button>
                                 </div>
                             </div>
                         ))}
                     </div>
                 )}
+
+                <Modal
+                    isOpen={Boolean(profileTherapist)}
+                    onClose={() => setProfileTherapist(null)}
+                    title="Therapist Profile"
+                    size="md"
+                >
+                    {profileTherapist && (
+                        <div className="tp-profile">
+                            <div className="tp-profile-head">
+                                <div className="tp-profile-avatar">
+                                    <FaUserMd />
+                                </div>
+                                <div>
+                                    <h3>{profileTherapist.first_name} {profileTherapist.last_name}</h3>
+                                    <p className="tp-profile-specialization">
+                                        {profileTherapist.specialization || 'General Therapist'}
+                                    </p>
+                                    <span className={`tp-profile-status ${isAvailable(profileTherapist) ? 'is-available' : 'is-unavailable'}`}>
+                                        {isAvailable(profileTherapist) ? 'Available to book' : 'Not currently available'}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div className="tp-profile-stats">
+                                <div>
+                                    <span className="tp-profile-stat-value">
+                                        <FaStar className="star-icon" /> {Number(profileTherapist.rating || 0).toFixed(1)}
+                                    </span>
+                                    <span className="tp-profile-stat-label">Rating</span>
+                                </div>
+                                <div>
+                                    <span className="tp-profile-stat-value">{profileTherapist.experience_years || 0}</span>
+                                    <span className="tp-profile-stat-label">Years experience</span>
+                                </div>
+                                <div>
+                                    <span className="tp-profile-stat-value">{profileTherapist.total_sessions || 0}</span>
+                                    <span className="tp-profile-stat-label">Sessions</span>
+                                </div>
+                                <div>
+                                    <span className="tp-profile-stat-value">
+                                        £{Number(profileTherapist.consultation_fee || 0).toFixed(2)}
+                                    </span>
+                                    <span className="tp-profile-stat-label">Per session</span>
+                                </div>
+                            </div>
+
+                            {profileTherapist.bio && (
+                                <section className="tp-profile-section">
+                                    <h4>About</h4>
+                                    <p>{profileTherapist.bio}</p>
+                                </section>
+                            )}
+
+                            <section className="tp-profile-section">
+                                <h4>Credentials</h4>
+                                <dl className="tp-profile-details">
+                                    <div>
+                                        <dt>Qualifications</dt>
+                                        <dd>{profileTherapist.qualifications || 'Not provided'}</dd>
+                                    </div>
+                                    <div>
+                                        <dt>Registration</dt>
+                                        <dd>{profileTherapist.license_number || 'Not provided'}</dd>
+                                    </div>
+                                    <div>
+                                        <dt>Specializations</dt>
+                                        <dd>
+                                            {splitSpecializations(profileTherapist.specialization).length > 0 ? (
+                                                <span className="tp-profile-tags">
+                                                    {splitSpecializations(profileTherapist.specialization).map((spec) => (
+                                                        <span key={spec} className="tp-profile-tag">{spec}</span>
+                                                    ))}
+                                                </span>
+                                            ) : 'General practice'}
+                                        </dd>
+                                    </div>
+                                </dl>
+                            </section>
+
+                            <div className="tp-profile-actions">
+                                <button
+                                    className="btn btn-primary"
+                                    onClick={() => handleBookSession(profileTherapist.id)}
+                                    disabled={!isAvailable(profileTherapist)}
+                                >
+                                    <FaCalendarCheck /> Book Session
+                                </button>
+                                <button
+                                    className="btn btn-outline"
+                                    onClick={() => handleMessageTherapist(profileTherapist.id)}
+                                >
+                                    <FaComments /> Message
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </Modal>
             </div>
         </div>
     );

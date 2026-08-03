@@ -26,7 +26,6 @@ import TherapistSessions from './screens/therapists/TherapistSessions';
 import TherapistStudents from './screens/therapists/TherapistStudents';
 import TherapistMessages from './screens/therapists/TherapistMessages';
 import AvailabilityManager from './screens/therapists/AvailabilityManager';
-import Reports from './screens/therapists/Reports';
 
 // Screens - Admin
 import AdminDashboard from './screens/admin/AdminDashboard';
@@ -78,7 +77,7 @@ function App() {
               <Route path="/student/therapists" element={<TherapistList />} />
               <Route path="/student/book-session/:therapistId?" element={<BookSession />} />
               <Route path="/student/sessions" element={<MySessions />} />
-              <Route path="/student/messages" element={<Messages />} />
+              <Route path="/student/messages/:userId?" element={<Messages />} />
               <Route path="/student/profile" element={<Profile />} />
             </Route>
 
@@ -87,9 +86,8 @@ function App() {
               <Route path="/therapist/dashboard" element={<TherapistDashboard />} />
               <Route path="/therapist/sessions" element={<TherapistSessions />} />
               <Route path="/therapist/students" element={<TherapistStudents />} />
-              <Route path="/therapist/messages" element={<TherapistMessages />} />
+              <Route path="/therapist/messages/:userId?" element={<TherapistMessages />} />
               <Route path="/therapist/availability" element={<AvailabilityManager />} />
-              <Route path="/therapist/reports" element={<Reports />} />
               <Route path="/therapist/profile" element={<Profile />} />
             </Route>
 

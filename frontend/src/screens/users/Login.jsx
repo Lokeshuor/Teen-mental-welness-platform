@@ -128,7 +128,6 @@ const Login = () => {
 
                         <div className="auth-footer">
                             <p>Don't have an account? <Link to="/register">Sign up</Link></p>
-                            <Link to="/forgot-password" className="forgot-link">Forgot password?</Link>
                         </div>
                     </div>
                 </div>

@@ -3,7 +3,6 @@ export const ROUTES = {
     // Public
     LOGIN: '/login',
     REGISTER: '/register',
-    FORGOT_PASSWORD: '/forgot-password',
     RESET_PASSWORD: '/reset-password',
     
     // Student
@@ -22,7 +21,6 @@ export const ROUTES = {
     THERAPIST_STUDENTS: '/therapist/students',
     THERAPIST_MESSAGES: '/therapist/messages',
     THERAPIST_AVAILABILITY: '/therapist/availability',
-    THERAPIST_REPORTS: '/therapist/reports',
     THERAPIST_PROFILE: '/therapist/profile',
     
     // Parent
@@ -53,7 +51,6 @@ export const ROLE_ROUTES = {
         ROUTES.THERAPIST_STUDENTS,
         ROUTES.THERAPIST_MESSAGES,
         ROUTES.THERAPIST_AVAILABILITY,
-        ROUTES.THERAPIST_REPORTS,
         ROUTES.THERAPIST_PROFILE,
     ],
     parent: [

@@ -11,24 +11,39 @@ import './AssessmentResults.css';
 const AssessmentResults = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const [assessment, setAssessment] = useState(location.state?.assessment || null);
-    const [riskLevel, setRiskLevel] = useState(location.state?.riskLevel || null);
-    const [score, setScore] = useState(location.state?.score || null);
-    const [recommendation, setRecommendation] = useState(location.state?.recommendation || null);
+    // Submitting an assessment hands the fresh result over in router state.
+    // Arriving from a link (the dashboard's "View Full Report") carries none,
+    // so the latest result is fetched instead.
+    const submitted = location.state;
+    const [assessment, setAssessment] = useState(submitted?.assessment || null);
+    const [riskLevel] = useState(submitted?.riskLevel || null);
+    const [score] = useState(submitted?.score ?? null);
+    const [recommendation] = useState(submitted?.recommendation || null);
     const [history, setHistory] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        fetchHistory();
+        fetchResults();
+        // Runs once on mount: the submitted result never changes mid-view.
     }, []);
 
-    const fetchHistory = async () => {
+    const fetchResults = async () => {
+        const hasSubmittedResult = Boolean(submitted?.assessment || submitted?.riskLevel);
         try {
-            const response = await api.get('/assessments/student');
-            setHistory(response.data || []);
-            setIsLoading(false);
+            const [historyRes, latestRes] = await Promise.all([
+                api.get('/assessments/student'),
+                hasSubmittedResult
+                    ? Promise.resolve({ data: null })
+                    : api.get('/assessments/latest').catch(() => ({ data: null }))
+            ]);
+
+            setHistory(historyRes.data || []);
+            if (latestRes.data) {
+                setAssessment(latestRes.data);
+            }
         } catch (error) {
-            console.error('Fetch history error:', error);
+            console.error('Fetch results error:', error);
+        } finally {
             setIsLoading(false);
         }
     };
@@ -69,7 +84,11 @@ const AssessmentResults = () => {
         );
     }
 
-    if (!assessment && !location.state) {
+    const latestScore = assessment?.total_score ?? score;
+    const latestRisk = assessment?.risk_level || riskLevel;
+    const latestRecommendation = assessment?.recommendation || recommendation;
+
+    if (latestScore === null || latestScore === undefined || !latestRisk) {
         return (
             <div className="results-empty">
                 <div className="container">
@@ -87,10 +106,6 @@ const AssessmentResults = () => {
             </div>
         );
     }
-
-    const latestScore = assessment?.total_score || score;
-    const latestRisk = assessment?.risk_level || riskLevel;
-    const latestRecommendation = assessment?.recommendation || recommendation;
 
     // Prepare chart data
     const chartData = history.map((item, index) => ({

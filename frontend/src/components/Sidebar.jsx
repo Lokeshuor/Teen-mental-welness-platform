@@ -42,7 +42,6 @@ const Sidebar = ({ isOpen, onClose }) => {
                     { path: '/therapist/sessions', icon: FaCalendarAlt, label: 'Sessions' },
                     { path: '/therapist/students', icon: FaUsers, label: 'Students' },
                     { path: '/therapist/availability', icon: FaCalendarAlt, label: 'Availability' },
-                    { path: '/therapist/reports', icon: FaChartLine, label: 'Reports' },
                     ...commonItems.slice(1),
                 ];
             case 'admin':
@@ -84,7 +83,10 @@ const Sidebar = ({ isOpen, onClose }) => {
 
                 <nav className="sidebar-nav">
                     {navItems.map((item) => {
-                        const isActive = location.pathname === item.path;
+                        // Prefix match so nested routes (e.g. a specific
+                        // message thread) keep their section highlighted.
+                        const isActive = location.pathname === item.path ||
+                            location.pathname.startsWith(`${item.path}/`);
                         const Icon = item.icon;
                         return (
                             <Link

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import toast from 'react-hot-toast';
-import { FaUser, FaClipboardCheck, FaCalendarAlt, FaPlus, FaTimes } from 'react-icons/fa';
+import { FaUser, FaClipboardCheck, FaCalendarAlt, FaHistory, FaPlus, FaTimes, FaUserMd } from 'react-icons/fa';
 import api from '../../utils/api';
 import { getUser } from '../../utils/auth';
 import './ParentDashboard.css';
@@ -12,9 +12,12 @@ const ParentDashboard = () => {
     const [childEmail, setChildEmail] = useState('');
     const [isLinking, setIsLinking] = useState(false);
     const [showLinkForm, setShowLinkForm] = useState(false);
+    const [pastSessions, setPastSessions] = useState([]);
+    const [sessionChildFilter, setSessionChildFilter] = useState('all');
 
     useEffect(() => {
         fetchChildren();
+        fetchPastSessions();
     }, []);
 
     const fetchChildren = async () => {
@@ -26,6 +29,15 @@ const ParentDashboard = () => {
             console.error('Fetch children error:', error);
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const fetchPastSessions = async () => {
+        try {
+            const response = await api.get('/users/my-children/sessions');
+            setPastSessions(response.data || []);
+        } catch (error) {
+            console.error('Fetch past sessions error:', error);
         }
     };
 
@@ -42,6 +54,7 @@ const ParentDashboard = () => {
             setChildEmail('');
             setShowLinkForm(false);
             fetchChildren();
+            fetchPastSessions();
         } catch (error) {
             // Error handled by interceptor
         } finally {
@@ -55,6 +68,7 @@ const ParentDashboard = () => {
             await api.delete(`/users/my-children/${child.id}`);
             toast.success('Child unlinked');
             fetchChildren();
+            fetchPastSessions();
         } catch (error) {
             // Error handled by interceptor
         }
@@ -78,6 +92,34 @@ const ParentDashboard = () => {
         return new Intl.DateTimeFormat('en-GB', {
             hour: 'numeric', minute: '2-digit', hour12: true
         }).format(new Date(2000, 0, 1, Number(hours), Number(minutes)));
+    };
+
+    const filteredSessions = useMemo(() => {
+        if (sessionChildFilter === 'all') return pastSessions;
+        return pastSessions.filter((session) => String(session.student_id) === sessionChildFilter);
+    }, [pastSessions, sessionChildFilter]);
+
+    const completedCount = useMemo(
+        () => pastSessions.filter((session) => session.status === 'completed').length,
+        [pastSessions]
+    );
+
+    const getStatusLabel = (session) => {
+        // A session left "scheduled" or "in-progress" past its date was never
+        // closed out by the therapist, so it reads as "Not recorded".
+        if (session.status === 'scheduled' || session.status === 'in-progress') return 'Not recorded';
+        return session.status === 'no-show'
+            ? 'Missed'
+            : session.status.charAt(0).toUpperCase() + session.status.slice(1);
+    };
+
+    const getStatusClass = (session) => {
+        const map = {
+            completed: 'is-completed',
+            cancelled: 'is-cancelled',
+            'no-show': 'is-missed'
+        };
+        return map[session.status] || 'is-pending';
     };
 
     if (isLoading) {
@@ -114,6 +156,15 @@ const ParentDashboard = () => {
                         <div className="pd-stat-info">
                             <h3>{children.reduce((sum, c) => sum + (c.upcoming_sessions || 0), 0)}</h3>
                             <p>Upcoming Sessions</p>
+                        </div>
+                    </div>
+                    <div className="pd-stat-card card">
+                        <div className="pd-stat-icon" style={{ backgroundColor: 'var(--success-light)' }}>
+                            <FaHistory style={{ color: 'var(--success)' }} />
+                        </div>
+                        <div className="pd-stat-info">
+                            <h3>{completedCount}</h3>
+                            <p>Completed Sessions</p>
                         </div>
                     </div>
                 </div>
@@ -235,6 +286,78 @@ const ParentDashboard = () => {
                                             <strong>{formatDate(child.next_session_date)}{child.next_session_time ? ` at ${formatTime(child.next_session_time)}` : ''}</strong>
                                         ) : <strong>No upcoming session</strong>}
                                     </div>
+                                </article>
+                            ))}
+                        </div>
+                    )}
+                </section>
+
+                <section className="pd-history" aria-labelledby="past-sessions-heading">
+                    <div className="pd-history-header">
+                        <div>
+                            <h2 id="past-sessions-heading"><FaHistory /> Past Sessions</h2>
+                            <p>Completed, cancelled and missed appointments for your linked children.</p>
+                        </div>
+                        {children.length > 1 && pastSessions.length > 0 && (
+                            <select
+                                className="form-select pd-history-filter"
+                                value={sessionChildFilter}
+                                onChange={(e) => setSessionChildFilter(e.target.value)}
+                                aria-label="Filter past sessions by child"
+                            >
+                                <option value="all">All children</option>
+                                {children.map((child) => (
+                                    <option key={child.id} value={String(child.id)}>
+                                        {child.first_name} {child.last_name}
+                                    </option>
+                                ))}
+                            </select>
+                        )}
+                    </div>
+
+                    {children.length === 0 ? (
+                        <div className="pd-no-children card">
+                            <p>Link a child to view their session history.</p>
+                        </div>
+                    ) : filteredSessions.length === 0 ? (
+                        <div className="pd-no-children card">
+                            <p>
+                                {pastSessions.length === 0
+                                    ? 'No past sessions yet.'
+                                    : 'No past sessions for this child.'}
+                            </p>
+                            <p className="pd-no-children-hint">
+                                Completed appointments will appear here after they take place.
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="pd-history-list">
+                            {filteredSessions.map((session) => (
+                                <article key={session.id} className="pd-history-item card">
+                                    <div className="pd-history-date">
+                                        <span className="pd-history-day">{formatDate(session.session_date)}</span>
+                                        <span className="pd-history-time">
+                                            {formatTime(session.start_time)} – {formatTime(session.end_time)}
+                                        </span>
+                                    </div>
+                                    <div className="pd-history-body">
+                                        <h4>{session.student_first} {session.student_last}</h4>
+                                        <p className="pd-history-therapist">
+                                            <FaUserMd /> {session.therapist_first} {session.therapist_last}
+                                            {session.therapist_specialization ? ` • ${session.therapist_specialization}` : ''}
+                                        </p>
+                                        <p className="pd-history-meta">
+                                            {session.session_type === 'in-person' ? 'In person' : 'Online'}
+                                        </p>
+                                        {session.status === 'cancelled' && session.cancellation_reason && (
+                                            <p className="pd-history-reason">
+                                                Reason: {session.cancellation_reason}
+                                            </p>
+                                        )}
+                                    </div>
+                                    <span className={`pd-history-status ${getStatusClass(session)}`}>
+                                        {getStatusLabel(session)}
+                                    </span>
                                 </article>
                             ))}
                         </div>
